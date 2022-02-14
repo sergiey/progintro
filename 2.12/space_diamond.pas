@@ -12,14 +12,13 @@ procedure PrintDiamondsHalf(line, height: integer; character: char);
 begin
     if line = 0 then begin
         PrintChars('*', 2 * height - 3);
-        writeln
-    end
-    else begin
-        PrintChars('*', height - 1 - line);
-        PrintChars(character, 2 * line - 1);
-        PrintChars('*', height - 1 - line);
-        writeln
-    end
+        writeln;
+        exit
+    end;
+    PrintChars('*', height - 1 - line);
+    PrintChars(character, 2 * line - 1);
+    PrintChars('*', height - 1 - line);
+    writeln
 end;
 
 var

@@ -1,12 +1,14 @@
+# Pascal
+*
+!*.*
+*.o
+progintro_e2_examples/
+test/
+
 # General
 .DS_Store
 .AppleDouble
 .LSOverride
-
-# Pascal modules
-*.o
-progintro_e2_examples/
-test/
 
 # Icon must end with two \r
 Icon
