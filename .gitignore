@@ -1,8 +1,6 @@
 # Pascal
-*
-!*.*
-!*_*
 *.o
+prog
 progintro_e2_examples/
 test/
 
