@@ -16,6 +16,8 @@ Icon
 ._*
 
 # Files that might appear in the root of a volume
+*.sublime-project
+*.sublime-workspace
 .DocumentRevisions-V100
 .fseventsd
 .Spotlight-V100

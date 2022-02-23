@@ -18,24 +18,22 @@ var
 begin
     {$I-}
     first := nil;
+    rec := nil;
     while not seekeof do 
     begin
         if first = nil then 
         begin
             new(rec);
-            first := rec;
-            read(rec^.data);
-            CheckIO('Couldn''t read number');
-            rec^.next := nil
+            first := rec
         end
         else 
         begin
             new(rec^.next);
-            rec :=rec^.next;
-            read(rec^.data);
-            CheckIO('Couldn''t read number');
-            rec^.next := nil
-        end
+            rec :=rec^.next
+        end;
+        read(rec^.data);
+        CheckIO('Couldn''t read number');
+        rec^.next := nil
     end;
     rec := first;
     while not (rec = nil) do

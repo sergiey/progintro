@@ -10,6 +10,7 @@ var
 begin
     {$I-}
     bufptr := nil;
+    initptr := nil;
     while not seekeof do
     begin
         new(initptr);
