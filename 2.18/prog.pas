@@ -1,4 +1,4 @@
-program task_2_19;
+program task_2_18;
 procedure ReadLongint(var success: boolean; var result: longint; base: integer);
 type
     Digits = array [1..36] of char;
