@@ -71,6 +71,32 @@ begin
     end
 end;
 
+procedure CountSevenMoreCharsWords(charsInWord: integer; wordGoesOn: boolean;
+    var sevenMoreCharsWords: integer; var word7IsTaken: boolean);
+begin
+    if (charsInWord > 7) and not word7IsTaken then begin
+        sevenMoreCharsWords := sevenMoreCharsWords + 1;
+        word7IsTaken := true
+    end;
+    if not wordGoesOn then
+        word7IsTaken := false
+end;
+
+procedure CountNoMoreTwoCharsWords(charsInWord: integer; wordGoesOn: boolean;
+    var noMoreTwoCharsWords: integer; var word2IsTaken: boolean);
+begin
+    if (charsInWord = 1) and not word2IsTaken then begin
+        noMoreTwoCharsWords := noMoreTwoCharsWords + 1;
+        word2IsTaken := true
+    end;
+    if (charsInWord >= 3) and word2IsTaken then begin
+        noMoreTwoCharsWords := noMoreTwoCharsWords - 1;
+        word2IsTaken := false
+    end;
+    if not wordGoesOn then
+        word2IsTaken := false    
+end;
+
 var
     n: char;
     wordGoesOn: boolean = false;
@@ -79,6 +105,11 @@ var
     charsCounter: integer = 1;
     wordsWithEvenChars: integer = 0;
     wordsWithOddChars: integer = 0;
+    sevenMoreCharsWords: integer = 0;
+    word7IsTaken: boolean = false;
+    noMoreTwoCharsWords: integer = 0;
+    word2IsTaken: boolean = false;
+
 begin
     {$I-}
     while not eoln do begin
@@ -92,8 +123,14 @@ begin
         CountCharactersInWord(n, wordGoesOn, charsInWord);
         CountEvenAndOddWords(wordGoesOn, charsCounter, wordsWithEvenChars,
             wordsWithOddChars);
+        CountSevenMoreCharsWords(charsInWord, wordGoesOn, sevenMoreCharsWords,
+            word7IsTaken);
+        CountNoMoreTwoCharsWords(charsInWord, wordGoesOn, noMoreTwoCharsWords,
+            word2IsTaken);
     end;
     writeln('a) Words in string: ', wordsInString);
-    writeln('b) Words with even amount of charcters: ',wordsWithEvenChars);
-    writeln('   Words with odd amount of charcters: ',wordsWithOddChars)
+    writeln('b) Words with even amount of charcters: ', wordsWithEvenChars);
+    writeln('   Words with odd amount of charcters: ', wordsWithOddChars);
+    writeln('c) Words with 7 more charcters: ', sevenMoreCharsWords);
+    writeln('   Words with no more than 2 charcters: ', noMoreTwoCharsWords)
 end.
