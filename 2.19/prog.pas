@@ -112,25 +112,27 @@ var
 
 begin
     {$I-}
-    while not eoln do begin
-        read(n);
-        if IOResult <> 0 then begin
-            writeln(ErrOutput, 'Couldn''t read symbol');
-            halt(1)
+    while not seekeof do begin
+        while not eoln do begin
+            read(n);
+            if IOResult <> 0 then begin
+                writeln(ErrOutput, 'Couldn''t read symbol');
+                halt(1)
+            end;
+            CountWordsInStringInString(n, wordsInString, wordGoesOn);
+            SwitchWordGoesOn(n, wordGoesOn);
+            CountCharactersInWord(n, wordGoesOn, charsInWord);
+            CountEvenAndOddWords(wordGoesOn, charsCounter, wordsWithEvenChars,
+                wordsWithOddChars);
+            CountSevenMoreCharsWords(charsInWord, wordGoesOn,
+                sevenMoreCharsWords, word7IsTaken);
+            CountNoMoreTwoCharsWords(charsInWord, wordGoesOn,
+                noMoreTwoCharsWords, word2IsTaken);
         end;
-        CountWordsInStringInString(n, wordsInString, wordGoesOn);
-        SwitchWordGoesOn(n, wordGoesOn);
-        CountCharactersInWord(n, wordGoesOn, charsInWord);
-        CountEvenAndOddWords(wordGoesOn, charsCounter, wordsWithEvenChars,
-            wordsWithOddChars);
-        CountSevenMoreCharsWords(charsInWord, wordGoesOn, sevenMoreCharsWords,
-            word7IsTaken);
-        CountNoMoreTwoCharsWords(charsInWord, wordGoesOn, noMoreTwoCharsWords,
-            word2IsTaken);
-    end;
-    writeln('a) Words in string: ', wordsInString);
-    writeln('b) Words with even amount of charcters: ', wordsWithEvenChars);
-    writeln('   Words with odd amount of charcters: ', wordsWithOddChars);
-    writeln('c) Words with 7 more charcters: ', sevenMoreCharsWords);
-    writeln('   Words with no more than 2 charcters: ', noMoreTwoCharsWords)
+        writeln('a) Words in string: ', wordsInString);
+        writeln('b) Words with even amount of charcters: ', wordsWithEvenChars);
+        writeln('   Words with odd amount of charcters: ', wordsWithOddChars);
+        writeln('c) Words with 7 more charcters: ', sevenMoreCharsWords);
+        writeln('   Words with no more than 2 charcters: ', noMoreTwoCharsWords)
+    end
 end.
