@@ -97,22 +97,50 @@ begin
         word2IsTaken := false    
 end;
 
+procedure IsParenthesesBalanced(n: char; var numClosedPar: integer;
+    var numOpenedPar: integer; var checkBalance: boolean;
+    var isBalanced: boolean);
+begin
+    if n = '(' then
+        numOpenedPar := numOpenedPar + 1;
+    if n = ')' then
+        numClosedPar := numClosedPar + 1;
+    if (numClosedPar > numOpenedPar) and checkBalance then begin
+        isBalanced := false;
+        checkBalance := false
+    end;
+    if (numClosedPar = numOpenedPar) and checkBalance then
+        isBalanced := true
+    else
+        isBalanced := false
+end;
+
 var
     n: char;
-    wordGoesOn: boolean = false;
-    wordsInString: integer = 0;
-    charsInWord: integer = 0;
-    charsCounter: integer = 1;
-    wordsWithEvenChars: integer = 0;
-    wordsWithOddChars: integer = 0;
-    sevenMoreCharsWords: integer = 0;
-    word7IsTaken: boolean = false;
-    noMoreTwoCharsWords: integer = 0;
-    word2IsTaken: boolean = false;
-
+    wordGoesOn: boolean;
+    wordsInString, charsInWord, charsCounter: integer;
+    wordsWithEvenChars, wordsWithOddChars: integer;
+    sevenMoreCharsWords, noMoreTwoCharsWords: integer;
+    word7IsTaken, word2IsTaken: boolean;
+    numClosedPar, numOpenedPar: integer;
+    checkBalance, isBalanced: boolean;
 begin
     {$I-}
     while not seekeof do begin
+        wordGoesOn := false;
+        wordsInString := 0;
+        charsInWord := 0;
+        charsCounter := 1;
+        wordsWithEvenChars := 0;
+        wordsWithOddChars := 0;
+        sevenMoreCharsWords := 0;
+        word7IsTaken := false;
+        noMoreTwoCharsWords := 0;
+        word2IsTaken := false;
+        checkBalance := true;
+        isBalanced := true;
+        numClosedPar := 0;
+        numOpenedPar := 0;
         while not eoln do begin
             read(n);
             if IOResult <> 0 then begin
@@ -128,11 +156,17 @@ begin
                 sevenMoreCharsWords, word7IsTaken);
             CountNoMoreTwoCharsWords(charsInWord, wordGoesOn,
                 noMoreTwoCharsWords, word2IsTaken);
+            IsParenthesesBalanced(n, numClosedPar, numOpenedPar, checkBalance,
+                isBalanced);
         end;
         writeln('a) Words in string: ', wordsInString);
         writeln('b) Words with even amount of charcters: ', wordsWithEvenChars);
         writeln('   Words with odd amount of charcters: ', wordsWithOddChars);
         writeln('c) Words with 7 more charcters: ', sevenMoreCharsWords);
-        writeln('   Words with no more than 2 charcters: ', noMoreTwoCharsWords)
+        writeln('   Words with no more than 2 charcters: ', noMoreTwoCharsWords);
+        if isBalanced then
+            writeln('g) Is parentheses balanced: YES')
+        else
+            writeln('g) Is parentheses balanced: NO')
     end
 end.
