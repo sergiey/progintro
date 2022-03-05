@@ -52,7 +52,7 @@ begin
         writeln('Enter number''s base from 2 to 16');
         read(base);
     until (2 <= base) and (base <= 16);
-    writeln('Enter number a number withe base ', base); 
+    writeln('Enter a number with base ', base); 
     ReadLongint(ok, x, base);
     writeln('Translate is success: ', ok);
     writeln('Entered number in decimal: ', x)
