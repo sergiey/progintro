@@ -52,8 +52,8 @@ begin
 end;
 var
     list: DLListOfLongints;
-    // pp: ^dllistptr;
-    current, tmp: dllistptr;
+    tmp: dllistptr;
+    pp: ^dllistptr;
     n: longint;
     counter: integer;
 begin
@@ -67,22 +67,21 @@ begin
         end;
         DLLOfLongintInsertFront(n, list)
     end;
-    DLLOfLongintInsertFront(999, list);
     writeln; 
-    current := list.first;
+    pp := @(list.first);
     while (list.first <> list.last) do begin
-        current := list.first;
-        n := current^.data;
+        pp := @(list.first);
+        n := pp^^.data;
         counter := 0;
-        while current^.next <> list.last^.next do begin
-            if current^.data = n then begin
+        while pp^ <> nil do begin
+            if pp^^.data = n then begin
                 counter := counter + 1;
-                tmp := current;
-                current := current^.next;
+                tmp := pp^;
+                pp := @(pp^^.next);
                 DLOfLongintDelNode(tmp, list)
             end
             else
-                current := current^.next
+                pp := @(pp^^.next)
         end;
         if counter = 3 then
             write(n, ' ')
