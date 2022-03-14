@@ -20,5 +20,6 @@ begin
             read(f, c);
         counter := counter + 1
     end;
+    close(f);
     writeln(counter)
 end.
