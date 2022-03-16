@@ -1,5 +1,8 @@
 # Pascal
 *.o
+*.ppu
+
+# Progintro
 prog
 progintro_e2_examples/
 test/
