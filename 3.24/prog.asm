@@ -1,8 +1,9 @@
 %include "../nasm_hello/stud_io.inc"
 global _start
-
+section .bss
+str1:   resb 4              ; test string address
 section .data
-dig:    dd "1", "5"             ; test digit
+dig:    dd "1", "5"         ; test digit
 
 section .text
 ; Get integer from standard input procedure
@@ -56,26 +57,102 @@ section .text
         pop esi             ; restire esi
         ret
 
+
+; Get string from integer. Parameters: eax = digit, ecx = address.
+get_str_from_int:
+
+section .bss
+.divdr:  resw 1             ; divider
+
+section .text
+        push edi            ; save edi
+        push ebx            ; save ebx
+        push esi            ; save esi
+        mov edi, ecx        ; set string address to edi
+        mov ebx, eax        ; copy integer to ebx       ebx = count
+        xor esi, esi        ; zeroing esi               esi = rank
+; Rank of count calculation
+.lp:    cmp ax, 0           ; is ax zero?
+        jz .next            ; jump to next section
+        push ebx            ; save ebx
+        mov bl, 10          ; move decimal digit base 10 to bl
+        div bl              ; divide ax by 10
+        pop ebx             ; restore ebx
+        inc esi             ; increase rank
+        cbw
+        jmp .lp             ; repeat loop
+; Divider calculation
+.next:  cmp esi, 0          ; is rank zero?
+        jz .quit            ; if so then quit
+        dec esi
+        mov ecx, esi        ; else set counter for get divider
+        mov ax, 1           ; move 1 to ax
+        cmp cx, 0           ; is cx zero?
+        jz .next2           ; if so then jump to next2
+.lp2:   push ebx            ; save ebx
+        mov ebx, 10         ; move decimal digit base 10 to ebx
+        mul ebx             ; power 10 (base) "rank" times
+        pop ebx             ; restore ebx
+        loop .lp2
+.next2: mov [.divdr], al    ; set divider
+        ; Print count number
+.lp3:   mov eax, ebx        ; move counted number in ax for calculate
+        cwd                 ;   high order digit
+        div word [.divdr]   ; divide counted number by divider
+        add al, 48          ; convert result to ASCII code
+        mov [edi], al       ; move ASCII char to destination address
+        add edi, 1          ; set next address
+        mov bx, dx          ; move reminder of the division to count
+        ; Decrease the divider by 10 times
+        mov al, [.divdr]
+        cwd
+        push ebx            ; save ebx
+        mov ebx, 10         ; move decimal digit base 10 to ebx
+        div ebx             ; divide divider by base (= 10)
+        pop ebx             ; restore ebx
+        mov [.divdr], al    ; set new divider
+        cmp byte [.divdr], 0; is divider zero?
+        jz .quit            ; if so then quit
+        jmp .lp3            ; else repeat loop
+.quit:  mov byte [edi + 1], 0   ; add zero byte in the end of the string
+        pop esi             ; restore esi
+        pop ebx             ; restore ebx
+        pop edi             ; restore edi
+        ret
+
 ; Main program
-_start: mov eax, dig        ; set first parameter
-        mov edx, 2          ; set second parameter
-        call get_stdin_int  ; call procedure
+_start:
+; Call get_stdin_int
+        ; mov eax, dig        ; set first parameter
+        ; mov edx, 2          ; set second parameter
+        ; call get_stdin_int  ; call procedure
 ; Print get_stdin_int result
-lp:     cmp eax, 0          ; print asterisk entered digit times
-        jz next
-        PRINT "*"
-        dec eax
-        jmp lp
-next:   PUTCHAR 10          ; print result of procedure work
-        cmp edx, 0
-        jz ok
-        cmp edx, 1
-        jz nok
-        PRINT "Not ok, not not ok"
-        jmp quit
-ok:     PRINT "Ok"
-        jmp quit
-nok:    PRINT "Not Ok"
-        jmp quit
+; lp:     cmp eax, 0          ; print asterisk entered digit times
+;         jz next
+;         PRINT "*"
+;         dec eax
+;         jmp lp
+; next:   PUTCHAR 10          ; print result of procedure work
+;         cmp edx, 0
+;         jz ok
+;         cmp edx, 1
+;         jz nok
+;         PRINT "Not ok, not not ok"
+;         jmp quit
+; ok:     PRINT "Ok"
+;         jmp quit
+; nok:    PRINT "Not Ok"
+;         jmp quit
+
+; Call get_str_from_int
+        mov eax, 126
+        mov ecx, str1
+        call get_str_from_int
+        xor ecx, ecx
+prnt:   cmp byte [str1 + ecx], 0
+        jz quit
+        PUTCHAR byte [str1 + ecx]
+        inc ecx
+        jmp prnt
 quit:   PUTCHAR 10          ; end program
         FINISH
