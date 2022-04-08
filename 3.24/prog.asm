@@ -2,10 +2,16 @@
 global _start
 
 section .bss
-str1:   resb 4              ; test string address
-
-section .data
-dig:    db "2", "9", "6"    ; test digit
+str1    resb 11             ; first string of digits
+len1    resb 11             ; first string length
+str2    resb 11             ; second string of digits
+len2    resb 11             ; second string length
+sumint  resd 1              ; sum integer result
+sumstr  resd 1              ; sum string result
+mulint  resd 1              ; mul integer result
+mulstr  resd 1              ; mul string result
+subint  resd 1              ; sub integer result
+substr  resd 1              ; sub string result
 
 section .text
 ; Get integer from string
@@ -127,7 +133,6 @@ print_str:
 ; (0 = end of file or end of line, -1 = not enough space for write,
 ; other data = code of not digit character)
 get_str_from_stdin:
-
 section .data
 ; ASCII decimal digits codes
 .decnum: db 48, 49, 50, 51, 52, 53, 54, 55, 56, 57
@@ -142,7 +147,7 @@ section .text
         jz .eof_q           ; if so then quit
         cmp al, 10          ; is end of line?
         jz .eof_q           ; if so then quit
-; Check is the character a digit     
+        ; Check is the character a digit     
         mov ecx, 10         ; set counter for check is entered char a digit
 .lp:    cmp al, [.decnum + ecx - 1]; compare char & decimal dig. array elem
         je .wrt             ; if char is a digit then write it
@@ -167,66 +172,102 @@ section .text
         ret
 
 
-; Main program
+        ; Main program
 _start:
-; Call get_str_from_stdin
+        ; Save first string number
         mov eax, str1
         call get_str_from_stdin
-        ; eax = result, ecx = count succ. wr. bytes
-; show ecx
-        PRINT "Successfully written bytes to ecx: "
-lp:     cmp ecx, 0
-        jz next
-        PRINT "*"
-        loop lp
-        PUTCHAR 10
-; show eax
-        PRINT "Work result from eax: "
-        cmp eax, 0          ; is end of file
-        jz q_eof            
-        cmp eax, -1         ; is enough space
-        jz q_nesp
-        PRINT "'"
-        PUTCHAR al
-        PRINT "' is not a digit"
-        jmp next
-q_eof:  PRINT "reached end of file or end of line"
-        jmp next 
-q_nesp: PRINT "not enough space"
-        jmp next 
-; Print string
-next:   PUTCHAR 10
-        PRINT "Input result: "   
+        cmp ecx, 0          ; is zero successfully bytes written?
+        jz q_zb1            ; if so then quit
+        mov [len1], ecx     ; set first string length
+        cmp eax, 0          ; is end of file or end of line?
+        jz q_eof            ; if so then quit
+        cmp eax, 32         ; is space entered
+        jz next             ; then read next string
+        jmp q_ndig1         ; else not a digit entered
+        ; Save second string number
+next:   mov eax, str2
+        call get_str_from_stdin
+        cmp ecx, 0          ; is zero successfully bytes written?
+        jz q_zb2            ; if so then quit
+        mov [len2], ecx     ; set first string length
+        cmp eax, 0          ; is end of file or end of line?
+        jz toint            ; if so then go to transer to int section
+        jmp q_ndig2         ; else not a digit entered
+        ; Transfer entered strings to integer
+toint:
+        ; First string to integer
         mov eax, str1
-        call print_str       
-
-; Call get_stdin_int
-;         mov eax, dig        ; set first parameter
-;         mov edx, 3          ; set second parameter
-;         call get_stdin_int  ; call procedure
-; ; Print get_stdin_int result
-; lp:     cmp eax, 0          ; print asterisk entered digit times
-;         jz next
-;         PRINT "*"
-;         dec eax
-;         jmp lp
-; next:   PUTCHAR 10          ; print result of procedure work
-;         cmp edx, 0
-;         jz ok
-;         cmp edx, 1
-;         jz nok
-;         PRINT "Not ok, not not ok"
-;         jmp quit
-; ok:     PRINT "Ok"
-;         jmp quit
-; nok:    PRINT "Not Ok"
-;         jmp quit
-
-; Call get_str_from_int
-        ; mov eax, 124
-        ; mov ecx, str1
-        ; call get_str_from_int
-        ; mov eax, str1
-        ; call print_str
+        mov edx, [len1]
+        call get_int_from_str
+        cmp edx, 1          ; if work result is not ok then quit
+        jz q_sif1
+        mov ebx, eax        ; first integer stored in ebx
+        ; Second string to integer
+        mov eax, str2
+        mov edx, [len2]
+        call get_int_from_str   ; now in eax stored second integer
+        cmp edx, 1          ; if work result is not ok then quit
+        jz q_sif2
+        ; Calculation section
+        ; Get sum
+        add ebx, eax
+        mov [sumint], ebx   ; save sum result
+        sub ebx, eax        ; reverse action
+        ; Get sub
+        sub ebx, eax
+        mov [subint], ebx   ; save sub result
+        add ebx, eax        ; reverse action
+        ; Get mul
+        mul ebx
+        mov [mulint], eax   ; save mul result
+        ; Transfer integer results to strings section
+        ; Transfer integer sum result to string
+        mov eax, [sumint]   ; move sum integer result to eax
+        mov ecx, sumstr     ; move destination address for string
+        call get_str_from_int
+        ; Transfer integer sub result to string
+        mov eax, [subint]   ; move sub integer result to eax
+        mov ecx, substr     ; move destination address for string
+        call get_str_from_int
+        ; Transfer integer mul result to string
+        mov eax, [mulint]   ; move mul integer result to eax
+        mov ecx, mulstr     ; move destination address for string
+        call get_str_from_int
+        ; Print results section
+        ; Print sum result
+        PRINT "Sum result: "  
+        mov eax, sumstr     ; move sum string result to eax
+        call print_str
+        PUTCHAR 10
+        ; Print sub result
+        PRINT "Sub result: "  
+        mov eax, substr     ; move sub string result to eax
+        call print_str
+        PUTCHAR 10
+        ; Print mul result
+        PRINT "Mul result: "  
+        mov eax, mulstr     ; move mul string result to eax
+        call print_str
+        jmp quit      
+        ; Quit section
+q_ndig1:PRINT "'"
+        PUTCHAR al
+        PRINT "' from first string is not a digit"
+        jmp quit
+q_ndig2:PRINT "'"
+        PUTCHAR al
+        PRINT "' from second string is not a digit"
+        jmp quit
+q_zb1:  PRINT "Successfully wrinten bytes from first number is zero"
+        jmp quit
+q_zb2:  PRINT "Successfully wrinten bytes from second number is zero"
+        jmp quit
+q_eof:  PRINT "No second number entered"
+        jmp quit
+q_sif1: PRINT "Can't transfer first string to integer"
+        jmp quit
+q_sif2: PRINT "Can't transfer second string to integer"
+        jmp quit
 quit:   PUTCHAR 10          ; end program
         FINISH
