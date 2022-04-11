@@ -57,7 +57,7 @@ get_int_from_str:
         ret
 
 
-; Get string from integer. Parameters: eax = digit, ecx = address.
+; Get string from integer (digit, address).
 get_str_from_int:
 
 section .text
@@ -123,7 +123,7 @@ section .text
         ret
 
 
-; Print string from address (eax = address)
+; Print string from address (address)
 print_str:
         push ebp
         mov ebp, esp
