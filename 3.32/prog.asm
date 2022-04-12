@@ -1,5 +1,4 @@
 ; This program successfully end if recive three command line parameters
-%include "../nasm_hello/stud_io.inc"
 global _start
 
 _start: cmp byte [esp], 4   ; is three parameters?
