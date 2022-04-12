@@ -1,6 +1,7 @@
 ; This program successfully end if recive three command line parameters
 global _start
 
+section .text
 _start: cmp byte [esp], 4   ; is three parameters?
         jz q_ok             ; if so then ok quit
         jmp q_nok           ; else not ok quit
