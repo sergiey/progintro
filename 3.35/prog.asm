@@ -1,6 +1,7 @@
 ; This program print longest command line parameter
 global _start
 
+section .text
 _start: cmp dword [esp], 1      ; is no command line parameters?
         jz quit                 ; if so then quit
         xor edi, edi            ; number of longest parameter stored in edi
