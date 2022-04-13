@@ -66,6 +66,10 @@ wrtout: mov eax, 4
         mov edx, ecx
         mov ecx, res
         int 80h
+        ; Close file
+        mov eax, 6
+        mov ebx, [fd]
+        int 80h
         jmp quit
         ; Print error message
 q_cof:  mov eax, 4
