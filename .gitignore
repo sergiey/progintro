@@ -2,6 +2,9 @@
 *.o
 *.ppu
 
+# C
+*.dSYM/
+
 # Progintro
 prog
 progintro_e2_examples/
