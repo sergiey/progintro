@@ -1,9 +1,9 @@
+# C
+*.dSYM/
+
 # Pascal
 *.o
 *.ppu
-
-# C
-*.dSYM/
 
 # Progintro
 prog
