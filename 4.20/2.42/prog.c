@@ -31,6 +31,24 @@ void print_char_array(char *array, int array_len)
         printf("%c", array[i]);
 }
 
+void print_char_array_reverse(char *array, int array_len)
+{
+    int posl = array_len - 1;
+    int posr = posl;
+    if(!array_len)
+        return;
+    while(posl != 0) {
+        if(array[posl] == ' ') {
+            print_char_array(&(array[posl + 1]), posr - posl);
+            printf(" ");
+            print_char_array_reverse(array, posl);
+            return;
+        }
+        posl--;
+    }
+    print_char_array(array, posr - posl + 1);
+}
+
 int main()
 {
     char c;
@@ -38,7 +56,7 @@ int main()
     char *arr = NULL;
     while((c = getchar()) != EOF)
         content_len = add_char_to_array(c, &arr);
-    print_char_array(arr, content_len);
+    print_char_array_reverse(arr, content_len);
     printf("\n");
     return 0;
 }
