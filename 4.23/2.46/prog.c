@@ -20,5 +20,6 @@ int main(int argc, char **argv)
         exit(2);
     }
     fprintf(f, TEXT);
+    fclose(f);
     return 0;
 }
