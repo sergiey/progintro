@@ -54,7 +54,7 @@ int main(int argc, char **argv)
         perror(argv[2]);
         return 3;
     }
-    flen = open(argv[3], O_WRONLY | O_CREAT | O_TRUNC);
+    flen = open(argv[3], O_WRONLY | O_CREAT | O_TRUNC, 0660);
     if(flen == -1) {
         perror(argv[3]);
         return 4;
