@@ -13,7 +13,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "Four parameters required\n");
         return 1;
     }
-    f = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC);
+    f = open(argv[1], O_WRONLY | O_CREAT, 0660);
     if(f == -1) {
         perror(argv[1]);
         return 2;
