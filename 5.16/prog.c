@@ -85,7 +85,7 @@ int count_lists_elements(struct word_item *list)
 
 void execute_command(struct word_item *list)
 {
-    int pid, status, wcnt, i;
+    int pid, wcnt, i;
     char **args;
     if(!list)
         return;
@@ -103,7 +103,7 @@ void execute_command(struct word_item *list)
             perror(args[0]);
             exit(1);
         } else
-            wait(&status);
+            wait(NULL);
     }
 }
 
