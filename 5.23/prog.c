@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
-// #include <sys/types.h>
-// #include <sys/uio.h>
 
 volatile static sig_atomic_t is_quit = 0;
 volatile static sig_atomic_t show = 0;
