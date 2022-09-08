@@ -2,7 +2,8 @@
 
 internal class Cube : Box
 {
-    public Cube(double sideEdgeLength) : base(sideEdgeLength, sideEdgeLength)
+    public Cube(double sideEdgeLength) 
+        : base(sideEdgeLength, sideEdgeLength)
     {
     }
 }

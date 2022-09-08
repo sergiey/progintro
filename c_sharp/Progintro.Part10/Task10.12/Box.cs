@@ -4,7 +4,8 @@ internal class Box : Prism
 {
     private double _baseEdgeLength;
 
-    public Box(double sideEdgeLength, double baseEdgeLength) : base(sideEdgeLength)
+    public Box(double sideEdgeLength, double baseEdgeLength)
+        : base(sideEdgeLength)
     {
         _baseEdgeLength = baseEdgeLength;
     }
